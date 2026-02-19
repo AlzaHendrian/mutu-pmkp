@@ -1,50 +1,79 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDashboardStore } from '../stores/dashboardStore';
 import type { DashboardState } from '../stores/dashboardStore';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from './ui/select';
 import { Button } from './ui/button';
 import { Lock, Unlock } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { FloatingLabelSelect } from './base/FloatingLabelSelect/FloatingLabelSelect';
+import type { SelectOption } from '@/types';
 
 // Dummy master data
-const masterUnits = [
-  { id: 1, name: 'IGD' },
-  { id: 2, name: 'Farmasi' },
-  { id: 3, name: 'Laboratorium' },
-  { id: 4, name: 'Radiologi' },
+const masterUnits: SelectOption[] = [
+  { value: 'IGD', label: 'IGD' },
+  { value: 'Farmasi', label: 'Farmasi' },
+  { value: 'Laboratorium', label: 'Laboratorium' },
+  { value: 'Radiologi', label: 'Radiologi' },
 ];
 
-const masterPeriode = [
-  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
-  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+const masterPeriode: SelectOption[] = [
+  { value: 'Januari', label: 'Januari' },
+  { value: 'Februari', label: 'Februari' },
+  { value: 'Maret', label: 'Maret' },
+  { value: 'April', label: 'April' },
+  { value: 'Mei', label: 'Mei' },
+  { value: 'Juni', label: 'Juni' },
+  { value: 'Juli', label: 'Juli' },
+  { value: 'Agustus', label: 'Agustus' },
+  { value: 'September', label: 'September' },
+  { value: 'Oktober', label: 'Oktober' },
+  { value: 'November', label: 'November' },
+  { value: 'Desember', label: 'Desember' },
 ];
 
-const masterRange = [
-  { id: 'Q1', name: 'Quarter 1 (Jan-Mar)' },
-  { id: 'Q2', name: 'Quarter 2 (Apr-Jun)' },
-  { id: 'Q3', name: 'Quarter 3 (Jul-Sep)' },
-  { id: 'Q4', name: 'Quarter 4 (Okt-Des)' },
+const masterRange: SelectOption[] = [
+  { value: 'Q1', label: 'Quarter 1 (Jan-Mar)' },
+  { value: 'Q2', label: 'Quarter 2 (Apr-Jun)' },
+  { value: 'Q3', label: 'Quarter 3 (Jul-Sep)' },
+  { value: 'Q4', label: 'Quarter 4 (Okt-Des)' },
 ];
 
-const masterTahun = ['2023', '2024', '2025', '2026'];
+const masterTahun: SelectOption[] = [
+  { value: '2023', label: '2023' },
+  { value: '2024', label: '2024' },
+  { value: '2025', label: '2025' },
+  { value: '2026', label: '2026' },
+];
+
+interface FilterFormValues {
+  unit: SelectOption | null;
+  filterType: SelectOption | null;
+  year: SelectOption | null;
+  filterValue: SelectOption | null;
+}
 
 const Filter: React.FC = () => {
-  const [unit, setUnit] = useState<string>('');
-  const [filterType, setFilterType] = useState<'Periode' | 'Range' | ''>('');
-  const [year, setYear] = useState<string>('');
-  const [filterValue, setFilterValue] = useState<string>('');
+  const { control, watch, setValue, formState: { isValid } } = useForm<FilterFormValues>({
+    defaultValues: {
+      unit: null,
+      filterType: null,
+      year: null,
+      filterValue: null,
+    },
+    mode: 'onChange'
+  });
+
+  const filterType = watch('filterType');
+
+  // Reset dependent fields when filterType changes
+  useEffect(() => {
+    setValue('year', null);
+    setValue('filterValue', null);
+  }, [filterType, setValue]);
   
   const isUnlocked = useDashboardStore((state: DashboardState) => state.isUnlocked);
   const unlock = useDashboardStore((state: DashboardState) => state.unlock);
   const lock = useDashboardStore((state: DashboardState) => state.lock);
-
-  const isInputInvalid = !unit || !filterType || !year || !filterValue;
 
   const handleToggle = () => {
     if (isUnlocked) {
@@ -55,84 +84,76 @@ const Filter: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full justify-end">
-      <div className="flex items-center gap-2 rounded-xl border bg-white/50 p-1.5 shadow-sm">
-        <Select value={unit} onValueChange={setUnit}>
-          <SelectTrigger className="w-[140px] border-none bg-transparent shadow-none hover:bg-accent focus:ring-0">
-            <SelectValue placeholder="Pilih Unit" />
-          </SelectTrigger>
-          <SelectContent>
-            {masterUnits.map(u => (
-              <SelectItem key={u.id} value={u.name}>{u.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+    <div className="flex w-full justify-end mb-8 px-4 sm:px-0">
+      <div className="flex items-center gap-3 rounded-2xl bg-white/70 backdrop-blur-md p-2 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-slate-200/50">
+        <FloatingLabelSelect
+          name="unit"
+          control={control}
+          label="Pilih Unit"
+          options={masterUnits}
+          containerClassName="w-full sm:w-[160px]"
+          className="h-11 min-h-[44px] text-sm"
+          rules={{ required: true }}
+        />
 
-        <Select 
-          value={filterType} 
-          onValueChange={(val) => {
-            setFilterType(val as 'Periode' | 'Range' | '');
-            setYear('');
-            setFilterValue(''); 
-          }}
-        >
-          <SelectTrigger className="w-[120px] border-none bg-transparent shadow-none hover:bg-accent focus:ring-0">
-            <SelectValue placeholder="Pilih Tipe" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Periode">Periode</SelectItem>
-            <SelectItem value="Range">Range</SelectItem>
-          </SelectContent>
-        </Select>
+        <FloatingLabelSelect
+          name="filterType"
+          control={control}
+          label="Pilih Tipe"
+          options={[
+            { value: 'Periode', label: 'Periode' },
+            { value: 'Range', label: 'Range' },
+          ]}
+          containerClassName="w-full sm:w-[140px]"
+          className="h-11 min-h-[44px] text-sm"
+          rules={{ required: true }}
+        />
 
-        {filterType && (
-          <Select value={year} onValueChange={setYear}>
-            <SelectTrigger className="w-[120px] border-none bg-transparent shadow-none hover:bg-accent focus:ring-0">
-              <SelectValue placeholder="Pilih Tahun" />
-            </SelectTrigger>
-            <SelectContent>
-              {masterTahun.map(y => (
-                <SelectItem key={y} value={y}>{y}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        {filterType?.value && (
+          <FloatingLabelSelect
+            name="year"
+            control={control}
+            label="Pilih Tahun"
+            options={masterTahun}
+            containerClassName="w-full sm:w-[130px]"
+            className="h-11 min-h-[44px] text-sm"
+            rules={{ required: true }}
+          />
         )}
 
-        {filterType === 'Periode' && (
-          <Select value={filterValue} onValueChange={setFilterValue}>
-            <SelectTrigger className="w-[140px] border-none bg-transparent shadow-none hover:bg-accent focus:ring-0">
-              <SelectValue placeholder="Pilih Bulan" />
-            </SelectTrigger>
-            <SelectContent>
-              {masterPeriode.map(m => (
-                <SelectItem key={m} value={m}>{m}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        {filterType?.value === 'Periode' && (
+          <FloatingLabelSelect
+            name="filterValue"
+            control={control}
+            label="Pilih Bulan"
+            options={masterPeriode}
+            containerClassName="w-full sm:w-[160px]"
+            className="h-11 min-h-[44px] text-sm"
+            rules={{ required: true }}
+          />
         )}
 
-        {filterType === 'Range' && (
-          <Select value={filterValue} onValueChange={setFilterValue}>
-            <SelectTrigger className="w-[160px] border-none bg-transparent shadow-none hover:bg-accent focus:ring-0">
-              <SelectValue placeholder="Pilih Quarter" />
-            </SelectTrigger>
-            <SelectContent>
-              {masterRange.map(q => (
-                <SelectItem key={q.id} value={q.name}>{q.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        {filterType?.value === 'Range' && (
+          <FloatingLabelSelect
+            name="filterValue"
+            control={control}
+            label="Pilih Quarter"
+            options={masterRange}
+            containerClassName="w-full sm:w-[180px]"
+            className="h-11 min-h-[44px] text-sm"
+            rules={{ required: true }}
+          />
         )}
 
         <Button 
           variant={isUnlocked ? "secondary" : "default"}
           size="sm"
           className={cn(
-            "h-9 gap-2 font-bold shadow-md",
-            !isUnlocked && "bg-primary text-white hover:bg-primary/90 shadow-[0_4px_12px_rgba(124,58,237,0.25)]",
-            isUnlocked && "bg-slate-500 hover:bg-slate-600 text-white"
+            "h-11 px-8 gap-2 font-bold shadow-lg transition-all rounded-xl ml-auto sm:ml-0",
+            !isUnlocked && "bg-primary text-white hover:bg-primary/90 shadow-primary/20 hover:-translate-y-0.5",
+            isUnlocked && "bg-slate-500 hover:bg-slate-600 text-white hover:bg-slate-700"
           )}
-          disabled={!isUnlocked && isInputInvalid}
+          disabled={!isUnlocked && !isValid}
           onClick={handleToggle}
         >
           {isUnlocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
