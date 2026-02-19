@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
       <div className="header-actions">
         <div className="notification-container">
           <button className="notification-btn">
-            <Bell size={20} className="text-slate-400" />
+            <Bell size={25} className="text-slate-400" />
             <span className="notification-badge">5</span>
           </button>
         </div>

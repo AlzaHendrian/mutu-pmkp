@@ -293,7 +293,15 @@ body {
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+  position: sticky;
+  top: -2rem;
+  z-index: 50;
+  background: #ffffff;
+  padding: 1rem 2.5rem;
+  margin: -2rem -2.5rem 2rem -2.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .header-breadcrumb {
@@ -337,31 +345,20 @@ body {
   gap: 1rem;
 }
 
-/* User profile chip */
 .user-profile {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 16px;
   padding: 0.35rem 0.6rem 0.35rem 1rem;
-  box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .user-profile:hover {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
 }
 
 .user-avatar-chip {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
   display: flex;
@@ -379,7 +376,7 @@ body {
 }
 
 .user-info .user-name {
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   font-weight: 700;
   display: block;
   color: var(--text-main);
@@ -387,37 +384,29 @@ body {
 }
 
 .user-info .user-role {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   font-weight: 500;
   letter-spacing: 0.01em;
 }
 
-/* Notification Button */
 .notification-container {
   position: relative;
 }
 
 .notification-btn {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
-  box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.03);
 }
 
 .notification-btn:hover {
-  background: #fff;
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.1);
 }
 
 .notification-btn:active {
@@ -440,6 +429,25 @@ body {
   justify-content: center;
   border: 2px solid #fff;
   box-shadow: 0 4px 8px rgba(244, 63, 94, 0.25);
+  animation: pulse 2s infinite;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(244, 63, 94, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+  }
 }
 
 /* ========================================
@@ -450,14 +458,6 @@ body {
   display: flex;
   justify-content: flex-end;
 }
-
-
-
-
-
-
-
-
 
 /* ========================================
    TABLE STYLES
