@@ -85,7 +85,7 @@ const Filter: React.FC = () => {
 
   return (
     <div className="flex w-full justify-end mb-8 px-4 sm:px-0">
-      <div className="flex items-center gap-3 rounded-2xl bg-white/70 backdrop-blur-md p-2 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-slate-200/50">
+      <div className="flex items-center gap-3 rounded-2xl bg-white/70 backdrop-blur-md p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-slate-200/50">
         <FloatingLabelSelect
           name="unit"
           control={control}

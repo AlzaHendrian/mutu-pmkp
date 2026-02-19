@@ -1,6 +1,7 @@
 import { PieChart, Pie, Cell } from 'recharts';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import React from 'react';
 
 interface MutualIndicatorCardProps {
   title: string;
@@ -34,13 +35,7 @@ const MutualIndicatorCard: React.FC<MutualIndicatorCardProps> = ({
 
   return (
     <Card
-      className="indicator-card relative overflow-hidden border-0 bg-white/80 p-6 shadow-none transition-all hover:-translate-y-1.5"
-      style={{
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        boxShadow: `0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.8) inset`,
-        borderRadius: '20px',
-      }}
+      className="relative overflow-hidden border-0 bg-white/80 p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05),inset_0_0_0_1px_rgba(255,255,255,0.8)] transition-all hover:-translate-y-1.5 backdrop-blur-md rounded-[20px]"
     >
       {/* Decorative gradient circle */}
       <div
@@ -59,8 +54,7 @@ const MutualIndicatorCard: React.FC<MutualIndicatorCardProps> = ({
         <div className="flex flex-col gap-3">
           {/* Title */}
           <h2
-            className="max-w-[170px] text-[0.72rem] font-bold uppercase leading-tight tracking-[0.8px]"
-            style={{ color: '#94a3b8' }}
+            className="max-w-[170px] text-[0.72rem] font-bold uppercase leading-tight tracking-[0.8px] text-slate-400"
           >
             {title}
           </h2>
@@ -68,8 +62,8 @@ const MutualIndicatorCard: React.FC<MutualIndicatorCardProps> = ({
           {/* Value */}
           <div className="flex items-baseline gap-1.5">
             <span
-              className="font-extrabold leading-none"
-              style={{ fontSize: '2.75rem', letterSpacing: '-2px', color: '#1e2235' }}
+              className="font-extrabold leading-none text-slate-800"
+              style={{ fontSize: '2.75rem', letterSpacing: '-2px' }}
             >
               {value}
             </span>
@@ -80,16 +74,15 @@ const MutualIndicatorCard: React.FC<MutualIndicatorCardProps> = ({
           <div className="flex items-center gap-2.5">
             <Badge
               variant="outline"
-              className="rounded-full border-none font-bold py-1 px-3 text-[0.65rem] tracking-wide"
+              className="rounded-full border-none font-bold py-1 px-3 text-[0.65rem] tracking-[0.5px]"
               style={{
                 backgroundColor: `${color}18`,
                 color: color,
-                letterSpacing: '0.5px',
               }}
             >
               {badgeLabel}
             </Badge>
-            <span className="text-[0.75rem] font-500 text-slate-400">{regulation}</span>
+            <span className="text-[0.75rem] font-medium text-slate-400">{regulation}</span>
           </div>
         </div>
 

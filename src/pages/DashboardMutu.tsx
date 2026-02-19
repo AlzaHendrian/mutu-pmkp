@@ -129,12 +129,14 @@ interface TooltipProps {
 const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tooltip">
-        <p className="label">{`${label}`}</p>
-        <div className="tooltip-details" style={{ fontSize: '12px' }}>
+      <div className="bg-white/92 backdrop-blur-lg border border-white/80 rounded-2xl p-4 px-5 shadow-[0_4px_6px_rgba(0,0,0,0.04),0_12px_32px_rgba(0,0,0,0.08)] text-slate-800 min-w-[180px]">
+        <p className="font-extrabold text-[0.85rem] mb-[0.65rem] pb-2 border-bottom border-black/5 text-slate-800 block">
+          {label}
+        </p>
+        <div className="flex flex-col gap-1.5">
           {payload.map((entry, index) => (
-            <div key={index} style={{ color: entry.color, padding: '2px 0', display: 'flex', gap: '8px' }}>
-              <span style={{ fontWeight: 600 }}>{entry.name}:</span>
+            <div key={index} className="flex gap-2 items-center" style={{ color: entry.color, fontSize: '12px' }}>
+              <span className="font-semibold">{entry.name}:</span>
               <span>{entry.value}%</span>
             </div>
           ))}
@@ -149,27 +151,27 @@ const DashboardMutu: React.FC = () => {
   const isUnlocked = useDashboardStore((state: DashboardState) => state.isUnlocked);
 
   return (
-    <div className="main-content">
+    <div className="flex-grow p-8 px-10 overflow-y-auto w-full min-h-screen bg-gradient-to-br from-[#f0f2f8] via-[#eef0f8] to-[#f3f0fb] flex flex-col">
       <Header 
         title="Dashboard Mutu" 
         subtitle="Monitoring Capaian Indikator Mutu RS" 
       />
 
       {!isUnlocked ? (
-        <div className="locked-container">
-          <div className="lock-box">
-            <div className="lock-icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="flex justify-center items-center flex-1 w-[calc(100%+5rem)] mt-4 -mx-10 -mb-8 bg-white/40 backdrop-blur-md border-t border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.03)] rounded-b-[30px]">
+          <div className="text-center flex flex-col items-center gap-6 p-8">
+            <div className="relative w-[72px] h-[72px] text-primary drop-shadow-[0_8px_20px_rgba(124,58,237,0.3)]">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
                 <path d="M12 17V15M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17ZM17 11V7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7V11M5 11H19C20.1046 11 21 11.8954 21 13V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V13C3 11.8954 3.89543 11 5 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <div className="lock-alert-badge">!</div>
+              <div className="absolute top-1/2 right-[-10px] transform -translate-y-1/2 bg-gradient-to-br from-[#f43f5e] to-[#e11d48] text-white w-[22px] h-[22px] rounded-full border-[3px] border-[#f0f2f8] flex items-center justify-center font-black text-[0.7rem] shadow-[0_2px_8px_rgba(244,63,94,0.4)]">!</div>
             </div>
-            <p className="lock-message">SILAHKAN PILIH PERUSAHAAN DAN TAHUN PERIODE TERLEBIH DAHULU !</p>
+            <p className="text-[0.9rem] font-bold text-slate-800 tracking-wider max-w-[320px] leading-relaxed">SILAHKAN PILIH PERUSAHAAN DAN TAHUN PERIODE TERLEBIH DAHULU !</p>
           </div>
         </div>
       ) : (
         <>
-          <div className="cards-grid">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5 mb-7 w-full">
         <MutualIndicatorCard
           title="INDIKATOR NASIONAL MUTU"
           value={13}
@@ -202,11 +204,11 @@ const DashboardMutu: React.FC = () => {
         />
       </div>
 
-      <div className="section-card">
-        <div className="section-card-header">
-          <h3>Tren Kepatuhan Mutu (6 Bulan Terakhir)</h3>
-          <div className="chart-tabs">
-            <span className="tab active">INM</span>
+      <div className="bg-white/80 backdrop-blur-md rounded-[20px] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-slate-200/60 mb-6 transition-all hover:translate-y-[-1px] hover:shadow-[0_4px_6px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)]">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-[0.95rem] font-extrabold m-0 text-slate-800 tracking-tight">Tren Kepatuhan Mutu (6 Bulan Terakhir)</h3>
+          <div className="flex gap-2">
+            <span className="px-[0.85rem] py-[0.3rem] rounded-full text-[0.72rem] font-bold cursor-pointer transition-all tracking-wider bg-gradient-to-br from-primary to-[#6366f1] text-white shadow-[0_3px_10px_rgba(124,58,237,0.3)]">INM</span>
           </div>
         </div>
         <div style={{ width: '100%', height: 380 }}>
@@ -267,9 +269,9 @@ const DashboardMutu: React.FC = () => {
         </div>
       </div>
 
-      <div className="section-card">
-        <div className="section-card-header">
-          <h3>Monitoring Kepatuhan Input (Februari 2026)</h3>
+      <div className="bg-white/80 backdrop-blur-md rounded-[20px] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-slate-200/60 mb-6 transition-all hover:translate-y-[-1px] hover:shadow-[0_4px_6px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)]">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-[0.95rem] font-extrabold m-0 text-slate-800 tracking-tight">Monitoring Kepatuhan Input (Februari 2026)</h3>
         </div>
         <MonitoringTable />
       </div>
