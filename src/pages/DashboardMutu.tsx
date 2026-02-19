@@ -4,32 +4,7 @@ import Header from '../components/Header';
 import { useDashboardStore } from '../stores/dashboardStore';
 import { Badge } from '../components/ui/badge';
 import type { DashboardState } from '../stores/dashboardStore';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-
-const trenData = [
-  { name: 'Jan', 'IGD': 85, 'Farmasi': 90, 'Laborat': 75, 'Radiologi': 80, 'Gizi': 95, 'Kesling': 70 },
-  { name: 'Feb', 'IGD': 88, 'Farmasi': 85, 'Laborat': 80 },
-  { name: 'Mar', 'IGD': 92, 'Farmasi': 88, 'Laborat': 85, 'Radiologi': 82 },
-  { name: 'Apr', 'IGD': 90, 'Farmasi': 95, 'Laborat': 88, 'Radiologi': 85, 'Gizi': 90 },
-  { name: 'Mei', 'IGD': 85, 'Farmasi': 92 },
-  { name: 'Jun', 'IGD': 95, 'Farmasi': 90, 'Laborat': 80, 'Radiologi': 88 },
-  { name: 'Jul', 'IGD': 88, 'Farmasi': 85, 'Laborat': 90, 'Radiologi': 92, 'Gizi': 85, 'Kesling': 88 },
-  { name: 'Agu', 'IGD': 92, 'Farmasi': 88, 'Laborat': 85 },
-  { name: 'Sep', 'IGD': 90, 'Farmasi': 95, 'Laborat': 90, 'Radiologi': 88 },
-  { name: 'Okt', 'IGD': 85, 'Farmasi': 92, 'Laborat': 95, 'Radiologi': 85, 'Gizi': 92, 'Kesling': 90 },
-  { name: 'Nov', 'IGD': 95, 'Farmasi': 90, 'Laborat': 92 },
-  { name: 'Des', 'IGD': 98, 'Farmasi': 95, 'Laborat': 90, 'Radiologi': 92, 'Gizi': 98, 'Kesling': 95 }
-];
-
-const unitConfig = [
-  { key: 'IGD', color: '#4338ca' },
-  { key: 'Farmasi', color: '#4f46e5' },
-  { key: 'Laborat', color: '#6366f1' },
-  { key: 'Radiologi', color: '#6d28d9' },
-  { key: 'Gizi', color: '#7c3aed' },
-  { key: 'Kesling', color: '#8b5cf6' }
-];
-
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 import {
   Table,
@@ -39,6 +14,30 @@ import {
   TableHeader,
   TableRow,
 } from '../components/ui/table';
+
+const trenData = [
+  { name: 'Jan', 'IGD': 85, 'Farmasi': 90, 'Laborat': 75, 'Radiologi': 80, 'Gizi': 95, 'Kesling': 70 },
+  { name: 'Feb', 'IGD': 88, 'Farmasi': 85, 'Laborat': 80, 'Radiologi': 82, 'Gizi': 88, 'Kesling': 75 },
+  { name: 'Mar', 'IGD': 92, 'Farmasi': 88, 'Laborat': 85, 'Radiologi': 82, 'Gizi': 92, 'Kesling': 80 },
+  { name: 'Apr', 'IGD': 90, 'Farmasi': 95, 'Laborat': 88, 'Radiologi': 85, 'Gizi': 90, 'Kesling': 85 },
+  { name: 'Mei', 'IGD': 85, 'Farmasi': 92, 'Laborat': 80, 'Radiologi': 88, 'Gizi': 85, 'Kesling': 82 },
+  { name: 'Jun', 'IGD': 95, 'Farmasi': 90, 'Laborat': 80, 'Radiologi': 88, 'Gizi': 95, 'Kesling': 88 },
+  { name: 'Jul', 'IGD': 88, 'Farmasi': 85, 'Laborat': 90, 'Radiologi': 92, 'Gizi': 85, 'Kesling': 88 },
+  { name: 'Agu', 'IGD': 92, 'Farmasi': 88, 'Laborat': 85, 'Radiologi': 82, 'Gizi': 90, 'Kesling': 85 },
+  { name: 'Sep', 'IGD': 90, 'Farmasi': 95, 'Laborat': 90, 'Radiologi': 88, 'Gizi': 92, 'Kesling': 90 },
+  { name: 'Okt', 'IGD': 85, 'Farmasi': 92, 'Laborat': 95, 'Radiologi': 85, 'Gizi': 92, 'Kesling': 90 },
+  { name: 'Nov', 'IGD': 95, 'Farmasi': 90, 'Laborat': 92, 'Radiologi': 88, 'Gizi': 95, 'Kesling': 92 },
+  { name: 'Des', 'IGD': 98, 'Farmasi': 95, 'Laborat': 90, 'Radiologi': 92, 'Gizi': 98, 'Kesling': 95 }
+];
+
+const unitConfig = [
+  { key: 'IGD', color: '#4f46e5' },
+  { key: 'Farmasi', color: '#10b981' },
+  { key: 'Laborat', color: '#f59e0b' },
+  { key: 'Radiologi', color: '#06b6d4' },
+  { key: 'Gizi', color: '#f43f5e' },
+  { key: 'Kesling', color: '#8b5cf6' }
+];
 
 const MonitoringTable: React.FC = () => {
   interface MonitoringRow {
@@ -129,15 +128,27 @@ interface TooltipProps {
 const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/92 backdrop-blur-lg border border-white/80 rounded-2xl p-4 px-5 shadow-[0_4px_6px_rgba(0,0,0,0.04),0_12px_32px_rgba(0,0,0,0.08)] text-slate-800 min-w-[180px]">
-        <p className="font-extrabold text-[0.85rem] mb-[0.65rem] pb-2 border-bottom border-black/5 text-slate-800 block">
-          {label}
-        </p>
-        <div className="flex flex-col gap-1.5">
+      <div className="bg-white/95 backdrop-blur-xl border border-white/80 rounded-2xl p-4 min-w-[240px] shadow-[0_10px_40px_rgba(0,0,0,0.1)] flex flex-col gap-4">
+        <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+          <div className="flex flex-col">
+            <span className="text-slate-800 font-bold text-sm">{label} 2026</span>
+            <span className="text-slate-400 text-[0.65rem] font-medium tracking-tight">Capaian Indikator Mutu</span>
+          </div>
+          <div className="flex items-center gap-1 bg-green-50 text-green-600 px-2 py-0.5 rounded-lg border border-green-100/50">
+            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M7 17L17 7M17 7H8M17 7V16" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="text-[0.65rem] font-bold">72%</span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2.5">
           {payload.map((entry, index) => (
-            <div key={index} className="flex gap-2 items-center" style={{ color: entry.color, fontSize: '12px' }}>
-              <span className="font-semibold">{entry.name}:</span>
-              <span>{entry.value}%</span>
+            <div key={index} className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                <span className="text-[0.7rem] font-bold text-slate-600">{entry.name}</span>
+              </div>
+              <span className="text-[0.7rem] font-black text-slate-800">{entry.value}%</span>
             </div>
           ))}
         </div>
@@ -149,6 +160,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
 
 const DashboardMutu: React.FC = () => {
   const isUnlocked = useDashboardStore((state: DashboardState) => state.isUnlocked);
+  const [activeTab, setActiveTab] = React.useState('INM');
 
   return (
     <div className="flex-grow p-8 px-10 overflow-y-auto w-full min-h-screen bg-gradient-to-br from-[#f0f2f8] via-[#eef0f8] to-[#f3f0fb] flex flex-col">
@@ -172,113 +184,124 @@ const DashboardMutu: React.FC = () => {
       ) : (
         <>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5 mb-7 w-full">
-        <MutualIndicatorCard
-          title="INDIKATOR NASIONAL MUTU"
-          value={13}
-          unit="Indikator"
-          badgeLabel="WAJIB"
-          regulation="Permenkes 30/2022"
-          percentage={90}
-          chartLabel={<>Kelengkapan<br />Input</>}
-          color="#0d9488"
-        />
-        <MutualIndicatorCard
-          title="PRIORITAS RS (IMP-RS)"
-          value={10}
-          unit="Indikator"
-          badgeLabel="PRIORITAS"
-          regulation="SK Direktur"
-          percentage={70}
-          chartLabel={<>Kelengkapan<br />Input</>}
-          color="#8b5cf6"
-        />
-        <MutualIndicatorCard
-          title="MUTU UNIT (IMP-UNIT)"
-          value={55}
-          unit="Indikator"
-          badgeLabel="UNIT KERJA"
-          regulation="Kamus Indikator"
-          percentage={20}
-          chartLabel={<>Kelengkapan<br />Input</>}
-          color="#f59e0b"
-        />
-      </div>
-
-      <div className="bg-white/80 backdrop-blur-md rounded-[20px] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-slate-200/60 mb-6 transition-all hover:translate-y-[-1px] hover:shadow-[0_4px_6px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)]">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-[0.95rem] font-extrabold m-0 text-slate-800 tracking-tight">Tren Kepatuhan Mutu (6 Bulan Terakhir)</h3>
-          <div className="flex gap-2">
-            <span className="px-[0.85rem] py-[0.3rem] rounded-full text-[0.72rem] font-bold cursor-pointer transition-all tracking-wider bg-gradient-to-br from-primary to-[#6366f1] text-white shadow-[0_3px_10px_rgba(124,58,237,0.3)]">INM</span>
+            <MutualIndicatorCard
+              title="INDIKATOR NASIONAL MUTU"
+              value={13}
+              unit="Indikator"
+              badgeLabel="WAJIB"
+              regulation="Permenkes 30/2022"
+              percentage={90}
+              chartLabel={<>Kelengkapan<br />Input</>}
+              color="#0d9488"
+            />
+            <MutualIndicatorCard
+              title="PRIORITAS RS (IMP-RS)"
+              value={10}
+              unit="Indikator"
+              badgeLabel="PRIORITAS"
+              regulation="SK Direktur"
+              percentage={70}
+              chartLabel={<>Kelengkapan<br />Input</>}
+              color="#8b5cf6"
+            />
+            <MutualIndicatorCard
+              title="MUTU UNIT (IMP-UNIT)"
+              value={55}
+              unit="Indikator"
+              badgeLabel="UNIT KERJA"
+              regulation="Kamus Indikator"
+              percentage={20}
+              chartLabel={<>Kelengkapan<br />Input</>}
+              color="#f59e0b"
+            />
           </div>
-        </div>
-        <div style={{ width: '100%', height: 380 }}>
-          <ResponsiveContainer>
-            <BarChart data={trenData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }} barGap={8}>
-              <defs>
-                {unitConfig.map((unit) => (
-                  <linearGradient key={`grad-${unit.key}`} id={`gradient-${unit.key}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={unit.color} stopOpacity={1}/>
-                    <stop offset="100%" stopColor={unit.color} stopOpacity={0.6}/>
-                  </linearGradient>
-                ))}
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-              <XAxis 
-                dataKey="name" 
-                axisLine={false} 
-                tickLine={false} 
-                tick={{ fontSize: 12, fill: '#94a3b8', fontWeight: 500 }} 
-                dy={15}
-              />
-              <YAxis 
-                axisLine={false} 
-                tickLine={false} 
-                tick={{ fontSize: 12, fill: '#94a3b8', fontWeight: 500 }}
-                unit="%"
-                dx={-10}
-              />
-              <Tooltip 
-                content={<CustomTooltip />} 
-                shared={false}
-              />
-              <Legend 
-                verticalAlign="top" 
-                align="right" 
-                iconType="circle"
-                wrapperStyle={{ paddingBottom: '30px', fontSize: '13px', fontWeight: 600 }}
-              />
-              {unitConfig.map((unit) => (
-                <Bar 
-                  key={unit.key}
-                  name={unit.key}
-                  dataKey={unit.key} 
-                  fill={`url(#gradient-${unit.key})`} 
-                  radius={0} /* Sharp corners */
-                  barSize={14}
-                  animationDuration={1500}
-                  animationBegin={200}
-                  activeBar={{ 
-                    stroke: '#fff', 
-                    strokeWidth: 2,
-                    fillOpacity: 1
-                  }}
-                />
-              ))}
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
 
-      <div className="bg-white/80 backdrop-blur-md rounded-[20px] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-slate-200/60 mb-6 transition-all hover:translate-y-[-1px] hover:shadow-[0_4px_6px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)]">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-[0.95rem] font-extrabold m-0 text-slate-800 tracking-tight">Monitoring Kepatuhan Input (Februari 2026)</h3>
-        </div>
-        <MonitoringTable />
-      </div>
-    </>
-  )}
-</div>
-);
+          <div className="bg-white/80 backdrop-blur-md rounded-[20px] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-slate-200/60 mb-6 transition-all hover:shadow-[0_4px_6px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)]">
+            <div className="flex justify-between items-center mb-10">
+              <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">Tren Kepatuhan Mutu (6 Bulan Terakhir)</h3>
+              <div className="flex items-center bg-slate-100/80 border border-slate-200/60 p-1 rounded-xl">
+                {['INM', 'IMP-RS', 'IMP-Unit'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                      activeTab === tab
+                        ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
+                        : 'text-slate-500 hover:text-slate-700 border border-transparent'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ width: '100%', height: 420 }} className="relative">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={trenData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid 
+                    strokeDasharray="4 6" 
+                    vertical={false} 
+                    horizontal={true} 
+                    stroke="#e2e8f0" 
+                    strokeOpacity={0.8}
+                  />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 13, fill: '#64748b', fontWeight: 600 }} 
+                    dy={20}
+                    padding={{ left: 20, right: 20 }}
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 13, fill: '#64748b', fontWeight: 600 }}
+                    unit="%"
+                    domain={[0, 100]}
+                    tickCount={6}
+                  />
+                  <Tooltip 
+                    content={<CustomTooltip />} 
+                    cursor={{ stroke: '#4338ca', strokeWidth: 1.5, strokeDasharray: '0' }}
+                  />
+                  <Legend 
+                    verticalAlign="bottom" 
+                    align="center" 
+                    iconType="circle"
+                    iconSize={10}
+                    wrapperStyle={{ paddingTop: '60px', fontSize: '13px', fontWeight: 700, color: '#475569' }}
+                    formatter={(value) => <span className="text-slate-600 ml-1 mr-4">{value}</span>}
+                  />
+                  {unitConfig.map((unit) => (
+                    <Line
+                      key={unit.key}
+                      name={unit.key}
+                      type="monotone"
+                      dataKey={unit.key}
+                      stroke={unit.color}
+                      strokeWidth={2.5}
+                      dot={{ r: 3, fill: unit.color, strokeWidth: 0 }}
+                      activeDot={{ r: 6, strokeWidth: 3, stroke: '#fff', fill: unit.color }}
+                      animationDuration={1500}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-md rounded-[20px] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-slate-200/60 mb-6 transition-all hover:translate-y-[-1px] hover:shadow-[0_4px_6px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)]">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-[0.95rem] font-extrabold m-0 text-slate-800 tracking-tight">Monitoring Kepatuhan Input (Februari 2026)</h3>
+            </div>
+            <MonitoringTable />
+          </div>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default DashboardMutu;
